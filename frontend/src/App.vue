@@ -28,10 +28,18 @@ import { RouterLink, RouterView } from 'vue-router'
     </sui-menu>
   </header>
 
-  
+  <main>
 
-  <RouterView @authenticated="setAuthenticated" :auth="authenticated" />
+    <RouterView @authenticated="setAuthenticated" :auth="authenticated" />
+  </main>
+
 </template>
+
+<style>
+main {
+  margin: 100px 10vw;
+}
+</style>
 
 
 <script>
@@ -39,7 +47,7 @@ import { RouterLink, RouterView } from 'vue-router'
         name: 'App',
         data() {
             return {
-                authenticated: false
+                authenticated: true
             }
         },
         methods: {

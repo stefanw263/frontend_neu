@@ -18,6 +18,7 @@
         </div>
 
         <sui-button type="button" @click="login">Login</sui-button>
+        <p>{{this.error}}</p>
     </sui-form>
 
 </template>
@@ -34,7 +35,8 @@
         data() {
             return {
                 username: "",
-                passwd: ""
+                passwd: "",
+                error: ""
             }
         },
         methods: {
@@ -59,10 +61,10 @@
                         this.$router.replace({ name: "home" })
                     }
                     else {
-                        console.log('wrong username or password')
+                        this.error = 'wrong username or password'
                     }
                 } else {
-                    console.log("A username and password must be present")
+                    this.error = 'A username and password must be present'
                 }
             }
         }
