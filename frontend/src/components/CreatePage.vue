@@ -4,11 +4,11 @@
 
     <sui-form id="contact-form" @submit="checkForm">
         <sui-form-group action="">
-            <sui-grid :columns="2" divided>
-                <sui-grid-row>
+            <sui-grid divided="vertically">
+                <sui-grid-row :columns="2">
                     <sui-grid-column>
                         <div class="field">
-                            <label>First Name</label>
+                            <label>First Name*</label>
                             <sui-input
                                 placeholder="John"
                                 v-model="firstname"
@@ -17,7 +17,7 @@
                     </sui-grid-column>
                     <sui-grid-column>
                         <div class="field">
-                            <label>Last Name</label>
+                            <label>Last Name*</label>
                             <sui-input
                                 placeholder="Doe"
                                 v-model="lastname"
@@ -26,7 +26,7 @@
                     </sui-grid-column>
                 </sui-grid-row>
 
-                <sui-grid-row>
+                <sui-grid-row :columns="2">
                     <sui-grid-column>
                         <div class="field">
                             <label>Middle Name</label>
@@ -49,7 +49,7 @@
                     </sui-grid-column>
                 </sui-grid-row>
 
-                <sui-grid-row>
+                <sui-grid-row :columns="2">
                     <sui-grid-column>
                         <div class="field">
                             <label>E-Mail</label>
@@ -61,7 +61,7 @@
                     </sui-grid-column>
                     <sui-grid-column>
                         <div class="field">
-                            <label>Phone</label>
+                            <label>Phone*</label>
                             <sui-input
                                 placeholder="0123124244"
                                 v-model="mobile"
@@ -70,7 +70,19 @@
                     </sui-grid-column>
                 </sui-grid-row>
 
-                <sui-grid-row>
+                <sui-grid-row :columns="1">
+                    <sui-grid-column>
+                        <div class="field">
+                            <label>Image-Url</label>
+                            <sui-input
+                                placeholder="https://example.com/image.png"
+                                v-model="image"
+                            />
+                        </div>
+                    </sui-grid-column>
+                </sui-grid-row>
+
+                <sui-grid-row :columns="3">
                     <sui-grid-column>
                         <sui-button color="green" type="button" @click="createContact">
                             <sui-icon name="check" />
@@ -78,15 +90,19 @@
                         </sui-button>
                     </sui-grid-column>
                     <sui-grid-column>
-                        <sui-button color="red" type="button">
+                        <sui-button color="red" type="button" @click="cancelContact">
                             <sui-icon name="cancel" />
                             Cancel
                         </sui-button>
+                    </sui-grid-column>
+                    <sui-grid-column>
+                        *field is required
                     </sui-grid-column>
                 </sui-grid-row>
             </sui-grid>
         </sui-form-group>
     </sui-form>
+    <sui-header as="h4" textAlign="center" color="red">{{this.error}}</sui-header>
 </template>
 
 <script>
@@ -99,14 +115,20 @@
                 middlename: '',
                 gender: '',
                 email: '',
-                mobile: ''
+                mobile: '',
+                image: '',
+                error: ''
             }
         },
         
         methods: {
             
             async createContact() {
-                console.log(this.firstname)
+                
+                if(this.firstname === '' || this.lastname === '' || this.mobile === ''){
+                    this.error = 'pls fill required fields!'
+                    return false;
+                }
 
                 try {
                     const data = {
@@ -115,10 +137,11 @@
                         "middlename" : this.middlename,
                         "gender" : this.gender,
                         "email" : this.email,
-                        "mobile" : this.mobile
+                        "mobile" : this.mobile,
+                        "image": this.image
                     }
 
-                    let response = await fetch('http://localhost:3000/contacts/', {
+                    let response = await fetch('https://backend-justin-dhbw.onrender.com/contacts/', {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -136,6 +159,10 @@
                     console.log(error)
                 }
             },
+
+            cancelContact() {
+                this.$emit('showEvent')
+            }
 
         }
     }

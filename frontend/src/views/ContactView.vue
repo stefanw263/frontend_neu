@@ -1,10 +1,13 @@
 <script setup>
 
 import ContactList from '../components/ContactList.vue'
+import CreatePage from '../components/CreatePage.vue'
+import EditPage from '../components/EditPage.vue'
 
 </script>
 
 <template>
+
   <div v-if="content === 1">
       <EditPage @show-event="show" :contact="editContact"></EditPage>
     </div>
@@ -14,7 +17,7 @@ import ContactList from '../components/ContactList.vue'
     </div>
 
     <div v-else>
-      <ContactList @show-event="show" @edit-event="edit" @create-event="create" :contacts="contacts"></ContactList>
+      <ContactList @show-event="show" @edit-event="edit" @create-event="create" @update-event="update" :contacts="contacts"></ContactList>
     </div>
 </template>
 
@@ -35,12 +38,25 @@ import ContactList from '../components/ContactList.vue'
             }
         },
         created(){
-          this.getData()
+          if(this.auth)
+            this.getData()
         },
         methods: {
           async getData() {
             try {
-              let response = await fetch("http://localhost:3000/contacts", {
+              let response = await fetch("https://backend-justin-dhbw.onrender.com/contacts", {
+                method: "GET"
+              })
+              this.contacts = await response.json()
+            } catch (error) {
+              console.log(error)
+            }
+            
+          },
+        
+          async update(lastname){
+            try {
+              let response = await fetch(`https://backend-justin-dhbw.onrender.com/contacts/search/${lastname}`, {
                 method: "GET"
               })
               this.contacts = await response.json()

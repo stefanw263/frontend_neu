@@ -12,7 +12,7 @@
 <template>
     <sui-grid doubling :columns="2">
     <sui-grid-column>
-        <sui-input  fluid action="Search" placeholder="Firstname... Lastname..." />
+        <sui-input  v-model="searchname" action="search" fluid @click="searchContact()" placeholder="lastname... or lastname..." />
     </sui-grid-column>
     <sui-grid-column>
         <sui-button color="black" @click="createContact()">
@@ -28,16 +28,17 @@
 
         <sui-card>
             
-            <sui-image v-if="contact.gender === 'M'" src="/img/male.png" wrapped />
-            <sui-image v-else-if="contact.gender === 'F'" src="/img/female.png" wrapped />
-            <sui-image v-else src="/img/diverse.png" wrapped />
+            <sui-image v-if="contact.image === ''" src="./img/blank.png" wrapped />
+
+            <sui-image v-else :src="contact.image" wrapped />
 
             <sui-card-content>
                 <sui-card-header textAlign="center">{{ contact.firstname }} {{ contact.middlename }} {{ contact.lastname }}</sui-card-header>
             </sui-card-content>
 
             <sui-card-description textAlign="center">
-                <span><sui-icon name="mail" color="black" /> {{ contact.email }}</span> 
+                <span v-if="contact.email != ''"><sui-icon name="mail" color="black" /> {{ contact.email }}</span> 
+                <span v-else><sui-icon name="mail" color="black" /> -</span>
                 <br />
                 <span><sui-icon name="phone" color="black" /> {{ contact.mobile }}</span> 
             </sui-card-description>
@@ -57,10 +58,15 @@
 
 <script>
     export default {
+        data() {
+            return {
+                searchname: ''
+            }
+        },
         methods: {
             async deleteContact(id) {
                 try {
-                    let response = await fetch(`http://localhost:3000/contacts/${id}`, {
+                    let response = await fetch(`https://backend-justin-dhbw.onrender.com/contacts/${id}`, {
                         method: "DELETE"
                     })
                     const res = await response.json()
@@ -74,6 +80,13 @@
             },
             createContact(){
                 this.$emit('createEvent')
+            },
+            searchContact(){
+                console.log('Search for: ', this.searchname)
+                if(this.searchname === '')
+                    this.$emit('showEvent')
+                else
+                    this.$emit('updateEvent', this.searchname)
             }
         }
     }

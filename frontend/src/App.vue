@@ -5,11 +5,19 @@ import { RouterLink, RouterView } from 'vue-router'
 <template>
   <header>
     <sui-menu fixed>
-        <sui-menu-item as="div">Welcome</sui-menu-item>
+        <sui-menu-item>
+          
+        <RouterLink to="/">
+          <sui-button color="orange">    
+            Welcome
+          </sui-button>
+          
+        </RouterLink>
+        </sui-menu-item>
         <sui-menu-item v-if="authenticated">
-            <sui-button color="orange" @click="showContact()">    
-            show Contact List
-        </sui-button>
+          <sui-button color="green" @click="showContact()">    
+            Contact List
+          </sui-button>
         </sui-menu-item>
         <sui-menu-menu position="right">
             <sui-menu-item>
@@ -47,7 +55,7 @@ main {
         name: 'App',
         data() {
             return {
-                authenticated: true
+                authenticated: false
             }
         },
         methods: {
@@ -56,6 +64,12 @@ main {
             },
             logout() {
                 this.authenticated = false;
+            },
+            showContact(){
+              this.$router.replace({ name: "contacts" })
+            },
+            showStart(){
+              this.$router.replace({ name: "hello" })
             }
         }
     }

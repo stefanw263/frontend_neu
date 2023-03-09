@@ -1,6 +1,6 @@
 <template>
 
-    <sui-form class="form">
+    <sui-form class="login">
         <sui-header as="h1" textAlign="center">Login</sui-header>
 
         <div class="field">
@@ -48,7 +48,7 @@
                         "passwd": md5(this.passwd)
                     }
 
-                    let response = await fetch('http://127.0.0.1:3000/auth', {
+                    let response = await fetch('https://backend-justin-dhbw.onrender.com/auth', {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -58,7 +58,7 @@
                     
                     if(response.status === 200){
                         this.$emit("authenticated", true)
-                        this.$router.replace({ name: "home" })
+                        this.$router.replace({ name: "contacts" })
                     }
                     else {
                         this.error = 'wrong username or password'
@@ -72,9 +72,21 @@
 </script>
 
 <style>
-.form {
-    width: 360px;
+
+.form,
+.login {
+    width: 90vw;
+    max-width: 460px !important;
+}
+
+.form{
+    margin: 20px auto;
+}
+.login {
     margin: 100px auto;
+}
+.column{
+    margin: 0 !important;
 }
 </style>
   
